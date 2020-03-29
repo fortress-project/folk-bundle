@@ -1,0 +1,35 @@
+{
+  "name": "fortress-project/folk-bundle",
+  "description": "Folk's user bundle for Symfony",
+  "type": "symfony-bundle",
+  "keywords": ["user", "folk", "fortress", "bundle", "symfony"],
+  "homepage": "https://fortress-project.org/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexandre Waeles",
+      "homepage": "https://axelandre42.ovh/",
+      "role": "developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/fortress-project/folk-bundle/issues",
+    "wiki": "https://github.com/fortress-project/folk-bundle/wiki"
+  },
+  "require": {
+    "php": "^7.3",
+    "symfony/framework-bundle": "^5.0.6",
+    "phpunit/phpunit": "^9.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fortress\\Folk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Fortress\\Folk\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable"
+}

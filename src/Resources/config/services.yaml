@@ -1,11 +1,9 @@
 services:
-
-    # Global service inclusion
-    Fortress\Folk\:
-        resources: '../../*.php'                               # Include all .php files in src/
-        exclude: '../../{DependencyInjection,Model,Resources}' # Exclude DependencyInjection, Model and Resources
-                                                               #  in src/
-
+    # Service defaults
+    _default:
         # Explicitly set autowiring and autoconfiguration for services
         autowire: true
         autoconfigure: true
+
+    # Global service inclusion
+    Fortress\Folk\Security\LoginFormAuthenticator: ~

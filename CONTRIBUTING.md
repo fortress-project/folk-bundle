@@ -16,7 +16,8 @@ Please follow the provided template and make sure your code follows the [Code of
 
 ## Code of conduct
 
-*Coming soon*
+Our code of conduct is based on GitHub Contributor Covenant Code of Conduct template.
+[You can read it here.](CODE_OF_CONDUCT.md)
 
 ## Code style
 

@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
 			->arrayNode("form_login")
 			->children()
 			->booleanNode("enable")
-			->defaultTrue()
+			->defaultFalse()
 			->end()
 			->scalarNode("route")
 			->defaultValue("app_login")
@@ -30,7 +30,9 @@ class Configuration implements ConfigurationInterface
 			->end()
 			->end()
 			->end()
-			->end();
+			->end()
+			->addDefaultChildrenIfNoneSet(["form_login" => ["route" => "app_login", "enabled" => false]])
+		;
 
 		return $treeBuilder;
 	}

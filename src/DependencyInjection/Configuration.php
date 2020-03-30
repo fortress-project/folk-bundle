@@ -15,14 +15,14 @@ class Configuration implements ConfigurationInterface
 	 */
 	public function getConfigTreeBuilder()
 	{
-		$treeBuilder = new TreeBuilder("fortress_folk");
+		$treeBuilder = new TreeBuilder('fortress_folk');
 
 		$treeBuilder->getRootNode()
 			->children()
-			->arrayNode("form_login")
+			->arrayNode('form_login')
 			->children()
-			->scalarNode("route")
-			->defaultValue("app_login")
+			->scalarNode('route')
+			->defaultValue('app_login')
 			->end()
 			->end()
 			->addDefaultsIfNotSet()

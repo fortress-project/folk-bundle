@@ -25,7 +25,7 @@ class FortressFolkExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
-		$loginFormAuthenticator = $container->getDefinition("fortress.folk.authenticator.login_form");
-		$loginFormAuthenticator->replaceArgument("\$route", $config["form_login"]["route"]);
+		$loginFormAuthenticator = $container->getDefinition('fortress.folk.authenticator.login_form');
+		$loginFormAuthenticator->replaceArgument('$route', $config['form_login']['route']);
 	}
 }

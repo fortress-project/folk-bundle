@@ -1,9 +1,7 @@
 services:
-    # Service defaults
-    _default:
-        # Explicitly set autowiring and autoconfiguration for services
+
+    # Login form authenticator
+    fortress.folk.authenticator.login_form:
+        class: Fortress\Folk\Security\LoginFormAuthenticator
         autowire: true
         autoconfigure: true
-
-    # Global service inclusion
-    Fortress\Folk\Security\LoginFormAuthenticator: ~

@@ -5,3 +5,5 @@ services:
         class: Fortress\Folk\Security\LoginFormAuthenticator
         autowire: true
         autoconfigure: true
+        arguments:
+            route: ~

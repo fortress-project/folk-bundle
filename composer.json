@@ -2,7 +2,7 @@
   "name": "fortress-project/folk-bundle",
   "description": "Folk's user bundle for Symfony",
   "type": "symfony-bundle",
-  "keywords": ["user", "folk", "fortress", "bundle", "symfony"],
+  "keywords": ["user", "folk", "fortress", "bundle", "symfony", "symfony5", "user-bundle"],
   "homepage": "https://fortress-project.org/",
   "license": "MIT",
   "authors": [

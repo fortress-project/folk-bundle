@@ -12,7 +12,7 @@
 		"user-bundle"
 	],
 	"homepage": "https://fortress-project.org/",
-	"license": "MIT",
+	"license": "GPL-3.0-only",
 	"authors": [
 		{
 			"name": "Alexandre Waeles",

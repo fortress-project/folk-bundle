@@ -20,18 +20,4 @@ interface UserInterface extends BaseUserInterface
 	 * @param string $username the new username
 	 */
 	function setUsername(string $username) : void ;
-
-	/**
-	 * Adds a role to the user.
-	 *
-	 * @param string $role the role
-	 */
-	function addRole(string $role) : void ;
-
-	/**
-	 * Removes a role to the user.
-	 *
-	 * @param string $role the role
-	 */
-	function removeRole(string $role) : void ;
 }

@@ -4,17 +4,15 @@
 namespace Fortress\Folk\Model;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class LocalUser extends AbstractUser implements LocalUserInterface
 {
 
 	/**
 	 * User's roles
 	 *
-	 * @var ArrayCollection
+	 * @var array
 	 */
-	protected $roles;
+	protected $roles = [];
 
 	/**
 	 * User's password
@@ -30,17 +28,12 @@ class LocalUser extends AbstractUser implements LocalUserInterface
 	 */
 	protected $salt;
 
-	public function __construct()
-	{
-		$this->roles = new ArrayCollection();
-	}
-
 	/**
 	 * @inheritDoc
 	 */
 	public function getRoles() : array
 	{
-		return $this->roles->toArray();
+		return $this->roles;
 	}
 
 	/**
@@ -81,21 +74,5 @@ class LocalUser extends AbstractUser implements LocalUserInterface
 	public function eraseCredentials()
 	{
 
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	function addRole(string $role): void
-	{
-		$this->roles->add($role);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	function removeRole(string $role): void
-	{
-		$this->roles->removeElement($role);
 	}
 }

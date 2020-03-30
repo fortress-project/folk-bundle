@@ -31,7 +31,6 @@ class Configuration implements ConfigurationInterface
 			->end()
 			->end()
 			->end()
-			->addDefaultChildrenIfNoneSet(["form_login" => ["route" => "app_login", "enabled" => false]])
 		;
 
 		return $treeBuilder;

@@ -5,7 +5,6 @@ namespace Fortress\Folk\DependencyInjection;
 
 
 use Exception;
-use Fortress\Folk\Security\LoginFormAuthenticator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -26,7 +25,7 @@ class FortressFolkExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
-		$loginFormAuthenticator = $container->getDefinition(LoginFormAuthenticator::class);
+		$loginFormAuthenticator = $container->getDefinition("fortress.folk.authenticator.login_form");
 		$loginFormAuthenticator->replaceArgument("route", $config["form_login"]["route"]);
 	}
 }

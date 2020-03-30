@@ -26,6 +26,7 @@ class Configuration implements ConfigurationInterface
 			->end()
 			->scalarNode("route")
 			->defaultValue("app_login")
+			->isRequired()
 			->end()
 			->end()
 			->end()

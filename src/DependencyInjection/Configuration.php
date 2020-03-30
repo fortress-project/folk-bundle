@@ -21,15 +21,15 @@ class Configuration implements ConfigurationInterface
 			->children()
 			->arrayNode("form_login")
 			->children()
-			->booleanNode("enable")
-			->defaultValue(true)
-			->end()
 			->scalarNode("route")
+			->defaultValue("app_login")
+			->end()
+			->end()
+			->addDefaultsIfNotSet()
 			->end()
 			->end()
 			->end()
-			->end()
-			->end();
+		;
 
 		return $treeBuilder;
 	}

@@ -1,0 +1,9 @@
+services:
+
+    # Login form authenticator
+    fortress.folk.authenticator.login_form:
+        class: Fortress\Folk\Security\LoginFormAuthenticator
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $route: ~

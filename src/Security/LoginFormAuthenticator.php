@@ -6,10 +6,14 @@ namespace Fortress\Folk\Security;
 
 use Fortress\Folk\Form\LoginFormType;
 use Fortress\Folk\Model\Form\LoginForm;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -23,21 +27,23 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface, ContainerAwareInterface
 {
 	use TargetPathTrait;
+	use ContainerAwareTrait;
 
 	private $urlGenerator;
 	private $csrfTokenManager;
 	private $passwordEncoder;
 	private $formFactory;
+	private $tokenStorage;
 
 	private $loginRoute;
 	private $redirectRoute;
 
 	public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
 								UserPasswordEncoderInterface $passwordEncoder, FormFactoryInterface $formFactory,
-								$loginRoute, $redirectRoute)
+								TokenStorageInterface $tokenStorage, $loginRoute, $redirectRoute)
 	{
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
@@ -45,6 +51,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 		$this->loginRoute = $loginRoute;
 		$this->redirectRoute = $redirectRoute;
 		$this->formFactory = $formFactory;
+		$this->tokenStorage = $tokenStorage;
 	}
 
 	/**
@@ -110,6 +117,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	 */
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
 	{
+		$rememberMeToken = new RememberMeToken(
+			$token->getUser(),
+			$providerKey,
+			$this->container->getParameter('kernel.secret')
+		);
+
+		$this->tokenStorage->setToken($rememberMeToken);
+
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);
 		}

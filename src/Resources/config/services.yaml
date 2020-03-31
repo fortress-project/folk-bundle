@@ -9,6 +9,6 @@ services:
             $loginRoute: fortress_folk_login
             $redirectRoute: ~
 
-    Fortress\Folk\Security\LoginFormAuthenticator:
+    Fortress\Folk\Controller\LoginController:
         autowire: true
         autoconfigure: true

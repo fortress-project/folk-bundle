@@ -6,8 +6,6 @@ namespace Fortress\Folk\Security;
 
 use Fortress\Folk\Form\LoginFormType;
 use Fortress\Folk\Model\Form\LoginForm;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,10 +26,9 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface, ContainerAwareInterface
+class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
 	use TargetPathTrait;
-	use ContainerAwareTrait;
 
 	private $urlGenerator;
 	private $csrfTokenManager;
@@ -138,7 +135,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 			$rememberMeToken = new RememberMeToken(
 				$token->getUser(),
 				$providerKey,
-				$this->container->getParameter('kernel.secret')
+				$this->parameters->get('kernel.secret')
 			);
 
 			$this->tokenStorage->setToken($rememberMeToken);

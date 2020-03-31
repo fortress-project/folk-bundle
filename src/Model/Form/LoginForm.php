@@ -29,7 +29,7 @@ class LoginForm
 	/**
 	 * @return string
 	 */
-	public function getUsername(): string
+	public function getUsername(): ?string
 	{
 		return $this->username;
 	}
@@ -45,7 +45,7 @@ class LoginForm
 	/**
 	 * @return string
 	 */
-	public function getPassword(): string
+	public function getPassword(): ?string
 	{
 		return $this->password;
 	}
@@ -61,7 +61,7 @@ class LoginForm
 	/**
 	 * @return bool
 	 */
-	public function isRememberMe(): bool
+	public function isRememberMe(): ?bool
 	{
 		return $this->rememberMe;
 	}
@@ -77,7 +77,7 @@ class LoginForm
 	/**
 	 * @return string
 	 */
-	public function getCsrfToken(): string
+	public function getCsrfToken(): ?string
 	{
 		return $this->csrfToken;
 	}

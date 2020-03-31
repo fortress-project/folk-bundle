@@ -1,0 +1,3 @@
+fortress_folk_login:
+    path: /login
+    controller: Fortress\Folk\Controller\LoginController::login

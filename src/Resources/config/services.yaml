@@ -8,3 +8,7 @@ services:
         arguments:
             $loginRoute: fortress_folk_login
             $redirectRoute: ~
+
+    Fortress\Folk\Security\LoginFormAuthenticator:
+        autowire: true
+        autoconfigure: true

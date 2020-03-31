@@ -9,7 +9,7 @@ use Fortress\Folk\Model\Form\LoginForm;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -35,7 +35,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	private $loginRoute;
 	private $redirectRoute;
 
-	public function __construct(UrlGenerator $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
+	public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
 								UserPasswordEncoderInterface $passwordEncoder, FormFactoryInterface $formFactory,
 								$loginRoute, $redirectRoute)
 	{

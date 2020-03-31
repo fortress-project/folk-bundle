@@ -27,8 +27,9 @@
 	"require": {
 		"php": "^7.3",
 		"symfony/framework-bundle": "^5.0.6",
-		"phpunit/phpunit": "^9.0.1",
 		"symfony/security-bundle": "^5.0.6",
+		"symfony/form": "^5.0.6",
+		"phpunit/phpunit": "^9.0.1",
 		"doctrine/orm": "^2.7.2"
 	},
 	"autoload": {

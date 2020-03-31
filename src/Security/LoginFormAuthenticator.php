@@ -8,6 +8,7 @@ use Fortress\Folk\Form\LoginFormType;
 use Fortress\Folk\Model\Form\LoginForm;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,19 +38,23 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	private $passwordEncoder;
 	private $formFactory;
 	private $tokenStorage;
+	private $parameters;
 
 	private $loginRoute;
 	private $redirectRoute;
 
 	public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
 								UserPasswordEncoderInterface $passwordEncoder, FormFactoryInterface $formFactory,
-								TokenStorageInterface $tokenStorage, $loginRoute, $redirectRoute)
+								TokenStorageInterface $tokenStorage, ParameterBagInterface $parameters, $loginRoute,
+								$redirectRoute)
 	{
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
 		$this->passwordEncoder = $passwordEncoder;
 		$this->formFactory = $formFactory;
 		$this->tokenStorage = $tokenStorage;
+		$this->parameters = $parameters;
+
 		$this->loginRoute = $loginRoute;
 		$this->redirectRoute = $redirectRoute;
 	}

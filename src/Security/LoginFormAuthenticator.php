@@ -117,13 +117,27 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	 */
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
 	{
-		$rememberMeToken = new RememberMeToken(
-			$token->getUser(),
-			$providerKey,
-			$this->container->getParameter('kernel.secret')
-		);
+		$form = $this->formFactory->create(LoginFormType::class, new LoginForm());
 
-		$this->tokenStorage->setToken($rememberMeToken);
+		$form->handleRequest($request);
+
+		if (!($form->isSubmitted() && $form->isValid()))
+		{
+			throw new CustomUserMessageAuthenticationException('No data found.');
+		}
+
+		$loginForm = $form->getData();
+
+		if ($loginForm->isRememberMe())
+		{
+			$rememberMeToken = new RememberMeToken(
+				$token->getUser(),
+				$providerKey,
+				$this->container->getParameter('kernel.secret')
+			);
+
+			$this->tokenStorage->setToken($rememberMeToken);
+		}
 
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);

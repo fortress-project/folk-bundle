@@ -6,13 +6,10 @@ namespace Fortress\Folk\Security;
 
 use Fortress\Folk\Form\LoginFormType;
 use Fortress\Folk\Model\Form\LoginForm;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -34,23 +31,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	private $csrfTokenManager;
 	private $passwordEncoder;
 	private $formFactory;
-	private $tokenStorage;
-	private $parameters;
 
 	private $loginRoute;
 	private $redirectRoute;
 
 	public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
 								UserPasswordEncoderInterface $passwordEncoder, FormFactoryInterface $formFactory,
-								TokenStorageInterface $tokenStorage, ParameterBagInterface $parameters, $loginRoute,
-								$redirectRoute)
+								$loginRoute, $redirectRoute)
 	{
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
 		$this->passwordEncoder = $passwordEncoder;
 		$this->formFactory = $formFactory;
-		$this->tokenStorage = $tokenStorage;
-		$this->parameters = $parameters;
 
 		$this->loginRoute = $loginRoute;
 		$this->redirectRoute = $redirectRoute;
@@ -119,28 +111,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	 */
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
 	{
-		$form = $this->formFactory->create(LoginFormType::class, new LoginForm());
-
-		$form->handleRequest($request);
-
-		if (!($form->isSubmitted() && $form->isValid()))
-		{
-			throw new CustomUserMessageAuthenticationException('No data found.');
-		}
-
-		$loginForm = $form->getData();
-
-		if ($loginForm->isRememberMe())
-		{
-			$rememberMeToken = new RememberMeToken(
-				$token->getUser(),
-				$providerKey,
-				$this->parameters->get('kernel.secret')
-			);
-
-			$this->tokenStorage->setToken($rememberMeToken);
-		}
-
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);
 		}

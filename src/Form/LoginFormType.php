@@ -20,7 +20,7 @@ class LoginFormType extends AbstractType
 			->add('username', TextType::class)
 			->add('password', PasswordType::class)
 			->add('remember_me', CheckboxType::class, ['required' => false])
-			->add("csrf_token", HiddenType::class)
+			->add('_csrf_token', HiddenType::class)
 			->add('submit', SubmitType::class);
 	}
 }

@@ -48,10 +48,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
 		$this->passwordEncoder = $passwordEncoder;
-		$this->loginRoute = $loginRoute;
-		$this->redirectRoute = $redirectRoute;
 		$this->formFactory = $formFactory;
 		$this->tokenStorage = $tokenStorage;
+		$this->loginRoute = $loginRoute;
+		$this->redirectRoute = $redirectRoute;
 	}
 
 	/**

@@ -6,4 +6,5 @@ services:
         autowire: true
         autoconfigure: true
         arguments:
-            $route: ~
+            $loginRoute: fortress_folk_login
+            $redirectRoute: ~

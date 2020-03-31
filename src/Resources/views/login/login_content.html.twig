@@ -1,2 +1,4 @@
-{{ error.message }}
+{% if error is not null %}
+    {{ error.message }}
+{% endif %}
 {{ form(form) }}

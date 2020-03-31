@@ -4,11 +4,15 @@
 namespace Fortress\Folk\Security;
 
 
+use Fortress\Folk\Form\LoginFormType;
+use Fortress\Folk\Model\Form\LoginForm;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,18 +30,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	private $urlGenerator;
 	private $csrfTokenManager;
 	private $passwordEncoder;
+	private $formFactory;
 
 	private $loginRoute;
 	private $redirectRoute;
 
 	public function __construct(UrlGenerator $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
-								UserPasswordEncoderInterface $passwordEncoder, $loginRoute, $redirectRoute)
+								UserPasswordEncoderInterface $passwordEncoder, FormFactoryInterface $formFactory,
+								$loginRoute, $redirectRoute)
 	{
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
 		$this->passwordEncoder = $passwordEncoder;
 		$this->loginRoute = $loginRoute;
 		$this->redirectRoute = $redirectRoute;
+		$this->formFactory = $formFactory;
 	}
 
 	/**
@@ -53,10 +60,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	 */
 	public function getCredentials(Request $request)
 	{
+		$form = $this->formFactory->create(LoginFormType::class, new LoginForm());
+
+		$form->handleRequest($request);
+
+		if (!($form->isSubmitted() && $form->isValid()))
+		{
+			throw new CustomUserMessageAuthenticationException('No data found.');
+		}
+
+		$loginForm = $form->getData();
+
 		$credentials = [
-			'username' => $request->request->get('username'),
-			'password' => $request->request->get('password'),
-			'csrf_token' => $request->request->get('_csrf_token'),
+			'username' => $loginForm->getUsername(),
+			'password' => $loginForm->getPassword(),
+			'csrf_token' => $loginForm->getCsrfToken(),
 		];
 
 		$request->getSession()->set(

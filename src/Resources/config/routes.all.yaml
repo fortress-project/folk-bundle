@@ -1,3 +1,7 @@
 fortress_folk_login:
     path: /login
     controller: Fortress\Folk\Controller\LoginController::login
+
+fortress_folk_logout:
+    path: /logout
+    controller: Fortress\Folk\Controller\LoginController::logout

@@ -4,6 +4,7 @@
 namespace Fortress\Folk\Controller;
 
 
+use \RuntimeException;
 use Fortress\Folk\Form\LoginFormType;
 use Fortress\Folk\Model\Form\LoginForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,5 +32,9 @@ class LoginController extends AbstractController
 			'form' => $form->createView(),
 			'error' => $error
 		]);
+	}
+
+	public function logout() {
+		throw new RuntimeException('Your logout route is not configured!');
 	}
 }

@@ -27,6 +27,9 @@ class LoginController extends AbstractController
 
 		$form = $this->createForm(LoginFormType::class, $loginForm);
 
-		return $this->render('@FortressFolk/login/login.html.twig', ['form' => $form, 'error' => $error]);
+		return $this->render('@FortressFolk/login/login.html.twig', [
+			'form' => $form->createView(),
+			'error' => $error
+		]);
 	}
 }

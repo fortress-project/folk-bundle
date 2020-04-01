@@ -9,6 +9,14 @@ services:
             $loginRoute: fortress_folk_login
             $redirectRoute: ~
 
+    fortress.folk.user_provider.default:
+        class: Fortress\Folk\Security\UserProvider
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $userClass: ~
+            $fields: ~
+
     Fortress\Folk\Controller\LoginController:
         autowire: true
         autoconfigure: true

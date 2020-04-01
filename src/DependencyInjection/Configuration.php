@@ -21,15 +21,28 @@ class Configuration implements ConfigurationInterface
 			->children()
 			->arrayNode('form_login')
 			->children()
-			->scalarNode('route')
-			->defaultValue('app_login')
+			->scalarNode('target')
+			->defaultValue('app_index')
+			->end()
+			->end()
+			->addDefaultsIfNotSet()
+			->end()
+			->arrayNode('user_provider')
+			->children()
+			->arrayNode('fields')
+			->scalarPrototype()
+			->defaultValue('username')
+			->end()
+			->addDefaultChildrenIfNoneSet()
+			->end()
+			->scalarNode('entity')
+			->defaultValue('App\\Entity\\User')
 			->end()
 			->end()
 			->addDefaultsIfNotSet()
 			->end()
 			->end()
-			->end()
-		;
+			->end();
 
 		return $treeBuilder;
 	}

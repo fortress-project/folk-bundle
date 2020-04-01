@@ -4,39 +4,43 @@
 namespace Fortress\Folk\Security;
 
 
+use Fortress\Folk\Form\LoginFormType;
+use Fortress\Folk\Model\Form\LoginForm;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractGuardAuthenticator
+class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
+	use TargetPathTrait;
+
 	private $urlGenerator;
 	private $csrfTokenManager;
 	private $passwordEncoder;
+	private $formFactory;
 
-	private $route;
+	private $loginRoute;
+	private $redirectRoute;
 
-	public function __construct(UrlGenerator $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager,
-								PasswordEncoderInterface $passwordEncoder, $route)
+	public function __construct(UrlGeneratorInterface $urlGenerator, UserPasswordEncoderInterface $passwordEncoder,
+								FormFactoryInterface $formFactory, $loginRoute, $redirectRoute)
 	{
 		$this->urlGenerator = $urlGenerator;
-		$this->csrfTokenManager = $csrfTokenManager;
 		$this->passwordEncoder = $passwordEncoder;
-		$this->route = $route;
-	}
+		$this->formFactory = $formFactory;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function start(Request $request, AuthenticationException $authException = null)
-	{
-		// TODO: Implement start() method.
+		$this->loginRoute = $loginRoute;
+		$this->redirectRoute = $redirectRoute;
 	}
 
 	/**
@@ -44,7 +48,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 	 */
 	public function supports(Request $request)
 	{
-		// TODO: Implement supports() method.
+		return $this->loginRoute === $request->attributes->get('_route') && $request->isMethod('POST');
 	}
 
 	/**
@@ -52,7 +56,28 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 	 */
 	public function getCredentials(Request $request)
 	{
-		// TODO: Implement getCredentials() method.
+		$form = $this->formFactory->create(LoginFormType::class, new LoginForm());
+
+		$form->handleRequest($request);
+
+		if (!($form->isSubmitted() && $form->isValid()))
+		{
+			throw new CustomUserMessageAuthenticationException('No data found.');
+		}
+
+		$loginForm = $form->getData();
+
+		$credentials = [
+			'username' => $loginForm->getUsername(),
+			'password' => $loginForm->getPassword(),
+		];
+
+		$request->getSession()->set(
+			Security::LAST_USERNAME,
+			$credentials['username']
+		);
+
+		return $credentials;
 	}
 
 	/**
@@ -60,7 +85,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 	 */
 	public function getUser($credentials, UserProviderInterface $userProvider)
 	{
-		// TODO: Implement getUser() method.
+		return $userProvider->loadUserByUsername($credentials['username']);
 	}
 
 	/**
@@ -68,15 +93,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 	 */
 	public function checkCredentials($credentials, UserInterface $user)
 	{
-		// TODO: Implement checkCredentials() method.
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-	{
-		// TODO: Implement onAuthenticationFailure() method.
+		return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
 	}
 
 	/**
@@ -84,14 +101,26 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 	 */
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
 	{
-		// TODO: Implement onAuthenticationSuccess() method.
+		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+			return new RedirectResponse($targetPath);
+		}
+
+		return new RedirectResponse($this->urlGenerator->generate($this->redirectRoute));
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function supportsRememberMe()
+	protected function getLoginUrl()
 	{
-		// TODO: Implement supportsRememberMe() method.
+		return $this->urlGenerator->generate($this->loginRoute);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getPassword($credentials): ?string
+	{
+		return $credentials['password'];
 	}
 }

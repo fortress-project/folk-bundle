@@ -27,9 +27,19 @@ class Configuration implements ConfigurationInterface
 			->end()
 			->addDefaultsIfNotSet()
 			->end()
+			->arrayNode('user_provider')
+			->children()
+			->enumNode('fields')
+			->defaultValue(['username'])
+			->end()
+			->scalarNode('entity')
+			->defaultValue('App\\Entity\\User')
 			->end()
 			->end()
-		;
+			->addDefaultsIfNotSet()
+			->end()
+			->end()
+			->end();
 
 		return $treeBuilder;
 	}

@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
 			->arrayNode('fields')
 			->scalarPrototype()
 			->end()
-			->addDefaultChildrenIfNoneSet(['username'])
+			->addDefaultChildrenIfNoneSet([0 => 'username'])
 			->end()
 			->scalarNode('entity')
 			->defaultValue('App\\Entity\\User')

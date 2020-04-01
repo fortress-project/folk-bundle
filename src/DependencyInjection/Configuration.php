@@ -32,7 +32,6 @@ class Configuration implements ConfigurationInterface
 			->enumNode('fields')
 			->values(['username'])
 			->end()
-			->addDefaultsIfNotSet()
 			->scalarNode('entity')
 			->defaultValue('App\\Entity\\User')
 			->end()

@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
 			->arrayNode('user_provider')
 			->children()
 			->enumNode('fields')
-			->defaultValue(['username'])
+			->values(['username'])
 			->end()
 			->scalarNode('entity')
 			->defaultValue('App\\Entity\\User')

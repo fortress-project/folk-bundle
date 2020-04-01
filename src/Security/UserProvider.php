@@ -47,7 +47,7 @@ class UserProvider implements UserProviderInterface
 	 */
 	public function refreshUser(UserInterface $user)
 	{
-		if (!(new ReflectionClass($user))->isSubclassOf($this->userClass))
+		if (!(new ReflectionClass($this->userClass))->isInstance($user))
 		{
 			throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
 		}

@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
 			->arrayNode('form_login')
 			->children()
 			->scalarNode('target')
-			->defaultValue('app_login')
+			->defaultValue('app_index')
 			->end()
 			->end()
 			->addDefaultsIfNotSet()

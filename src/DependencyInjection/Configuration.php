@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
 			->children()
 			->arrayNode('form_login')
 			->children()
-			->scalarNode('route')
+			->scalarNode('target')
 			->defaultValue('app_login')
 			->end()
 			->end()
